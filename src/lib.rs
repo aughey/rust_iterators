@@ -68,16 +68,16 @@ impl Iterator for AllInVec {
     }
 }
 
-pub struct AllInSlice<'a,T> {
+pub struct AllInSlice<'a, T> {
     v: &'a [T],
     index: usize,
 }
-impl<'a,T> AllInSlice<'a,T> {
+impl<'a, T> AllInSlice<'a, T> {
     pub fn new(v: &'a [T]) -> Self {
         Self { v, index: 0 }
     }
 }
-impl<'a,T> Iterator for AllInSlice<'a,T> {
+impl<'a, T> Iterator for AllInSlice<'a, T> {
     type Item = &'a T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -90,7 +90,6 @@ impl<'a,T> Iterator for AllInSlice<'a,T> {
         }
     }
 }
-
 
 pub struct Take<I> {
     iter: I,
@@ -190,26 +189,33 @@ fn test_take() {
 
 #[test]
 fn test_vec() {
-    let mut iter = AllInVec::new(vec![1,2,3]);
-    assert_eq!(iter.next(),Some(1));
-    assert_eq!(iter.next(),Some(2));
-    assert_eq!(iter.next(),Some(3));
-    assert_eq!(iter.next(),None);
+    let v = vec![1, 2, 3];
+
+    let mut iter = AllInVec::new(v);
+
+    assert_eq!(iter.next(), Some(1));
+    assert_eq!(iter.next(), Some(2));
+    assert_eq!(iter.next(), Some(3));
+    assert_eq!(iter.next(), None);
 }
 
 #[test]
 fn test_slice() {
-    let v = vec![1,2,3];
-    let mut iter = AllInSlice::new(v.as_slice());
-    assert_eq!(iter.next(),Some(&1));
-    assert_eq!(iter.next(),Some(&2));
-    assert_eq!(iter.next(),Some(&3));
-    assert_eq!(iter.next(),None);
+    let v = vec![1, 2, 3];
 
-    let v = vec![1.0,2.0,3.0];
     let mut iter = AllInSlice::new(v.as_slice());
-    assert_eq!(iter.next(),Some(&1.0));
-    assert_eq!(iter.next(),Some(&2.0));
-    assert_eq!(iter.next(),Some(&3.0));
-    assert_eq!(iter.next(),None);
+
+    assert_eq!(iter.next(), Some(&1));
+    assert_eq!(iter.next(), Some(&2));
+    assert_eq!(iter.next(), Some(&3));
+    assert_eq!(iter.next(), None);
+
+    let v = vec![1.0, 2.0, 3.0];
+
+    let mut iter = AllInSlice::new(v.as_slice());
+
+    assert_eq!(iter.next(), Some(&1.0));
+    assert_eq!(iter.next(), Some(&2.0));
+    assert_eq!(iter.next(), Some(&3.0));
+    assert_eq!(iter.next(), None);
 }
